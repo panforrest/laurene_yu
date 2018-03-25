@@ -20,4 +20,32 @@ router.post('/register', function(req, res){
 
 })
 
+router.post('/login', function(req, res){
+	const credentials = {
+		email: req.body.email,
+		password: req.body.password
+	}
+	
+	turbo.login(credentials)
+	.then(data => {
+		req.vertexSession.user = {id: data.id} // set session with user ID
+		// res.json({
+		// 	confirmation: 'success',
+		// 	data: data
+		// })
+		res.redirect('/')
+	})
+	.catch(err => {
+		res.json({
+			confirmation: 'fail',
+			message: err.message
+		})
+	})
+})
+
+router.get('/logout', function(req, res){
+	req.vertexSession.reset()
+	res.redirect('/')
+})
+
 module.exports = router

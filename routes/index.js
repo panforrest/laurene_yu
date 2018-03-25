@@ -10,7 +10,11 @@ const arts = [
 ]
 
 router.get('/', function(req, res){
-	res.render('index', {arts: arts})
+    if ((!req.vertexSession) || (!req.vertexSession.user)) {
+    	res.render('index', {notLoggedin: true})
+    }
+
+	res.render('index', {arts: arts, loggedin: true})
 })
 
 module.exports = router
